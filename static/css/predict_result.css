@@ -1,0 +1,397 @@
+/* static/css/predict_result.css */
+
+.page-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    color: #163440;
+}
+
+.header-bar {
+    background: linear-gradient(90deg, #1e8fa4, #2cbfa8);
+    color: #fff;
+    padding: 18px 24px;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.header-bar h1 {
+    margin: 0;
+    font-size: 1.6rem;
+}
+
+.header-bar p {
+    margin: 4px 0 0 0;
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.badge-model {
+    background: rgba(0,0,0,0.15);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+}
+
+.layout {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+}
+
+.layout > div {
+    width: 100%;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 20px 22px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    margin-bottom: 18px;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: #1a4c5d;
+}
+
+.subtext {
+    font-size: 0.9rem;
+    color: #6b7d86;
+}
+
+.risk-value {
+    font-size: 2.1rem;
+    font-weight: 700;
+}
+
+.risk-low {
+    color: #0a7b45;
+}
+
+.risk-high {
+    color: #d92626;
+}
+
+.risk-pill {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 8px 18px;
+    border-radius: 999px;
+
+    font-size: 2.1rem;    
+    font-weight: 700;     
+    line-height: 1;
+
+    margin-left: 12px;
+}
+
+.risk-pill.low {
+    background: #d6f5e6;
+    color: #0a7b45;
+}
+
+.risk-pill.high {
+    background: #fde2df;
+    color: #d92626;
+}
+
+.threshold-info {
+    font-size: 0.85rem;
+    color: #62727b;
+    margin-top: 6px;
+}
+
+.gauge-wrap {
+    margin-top: 16px;
+}
+
+.gauge-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: #5e707a;
+    margin-top: 4px;
+}
+
+.explain-image {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #dde8ea;
+    background: #f8fbfc;
+}
+
+.force-iframe {
+    width: 100%;
+    min-height: 260px;
+    border: 1px solid #dde8ea;
+    border-radius: 10px;
+    background: #ffffff;
+}
+
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: auto;          
+    max-width: fit-content;
+
+    margin-top: 10px;
+    padding: 8px 16px;
+
+    border-radius: 999px;
+    border: none;
+    background: #1e8fa4;
+    color: #fff;
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-back:hover {
+    background: #16788a;
+}
+
+.factor-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.92rem;
+}
+
+.factor-table th {
+    background: #1e8fa4;
+    color: white;
+    padding: 10px;
+    text-align: left;
+}
+
+.factor-table td {
+    padding: 9px;
+    border-bottom: 1px solid #dde8ea;
+}
+
+.factor-table tr:nth-child(even) {
+    background: #f2fbfa;
+}
+
+.info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-left: 6px;
+    border-radius: 50%;
+    background: #1e8fa4;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: help;
+    position: relative;
+}
+
+.info-icon:hover::after {
+    content: attr(data-text);
+    position: absolute;
+    bottom: 130%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #163440;
+    color: #ffffff;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    line-height: 1.45;
+    width: 280px;
+    max-width: 320px;
+    white-space: normal;
+    text-align: left;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    z-index: 100;
+}
+
+.info-icon:hover::before {
+    content: "";
+    position: absolute;
+    bottom: 115%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: #163440 transparent transparent transparent;
+}
+
+.risk-main{
+    min-width: 220px;
+}
+
+.risk-secondary{
+    margin-top: 6px;
+    font-size: 1.05rem;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+}
+
+.risk-mult{
+    font-weight: 800;
+}
+
+.risk-muted{
+    color:#62727b;
+    font-size:0.95rem;
+}
+
+.risk-meta{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    align-items:flex-end;
+}
+
+.risk-index{
+    font-size:0.9rem;
+    color:#1a4c5d;
+    background:#f2fbfa;
+    border:1px solid #dde8ea;
+    padding:6px 10px;
+    border-radius:10px;
+}
+
+.gauge-tick{
+    position:absolute;
+    top:0;
+    width:2px;
+    height:18px;
+    background: rgba(255,255,255,0.75);
+}
+
+.gauge-bar {
+    position: relative;
+    height: 18px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #0a7b45, #ffb800, #d92626);
+    overflow: visible;
+}
+
+.gauge-dot {
+    position: absolute;
+    top: 50%;
+
+    width: 22px;         
+    height: 22px;
+
+    border-radius: 50%;
+    border: 3px solid white;
+
+    box-shadow: 0 0 6px rgba(0,0,0,0.4);
+
+    transform: translate(-50%, -50%);
+}
+
+.gauge-marker {
+    position: absolute;
+    top: 50%;
+    width: 3px;
+    height: 26px;
+    background: #ffffff;
+    box-shadow: 0 0 4px rgba(0,0,0,0.4);
+    transform: translateY(-50%);
+}
+
+.gauge-dot.low {
+    background: #0a7b45;
+}
+
+.gauge-dot.high {
+    background: #d92626;
+}
+
+.shap-split {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+@media (min-width: 900px) {
+    .shap-split {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.shap-mini-title {
+    font-size: 0.95rem;    
+    font-weight: 700;
+    color: #1a4c5d;
+    margin: 4px 0 10px 0;
+}
+
+.risk-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:18px;
+  flex-wrap:wrap;
+}
+
+.risk-left{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  align-items:flex-start;
+  min-width:220px;
+}
+
+.risk-right{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  align-items:flex-end;
+  min-width:280px;
+  text-align:right;
+}
+
+.risk-primary-sm{
+  font-size: 1.6rem;  
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.risk-explainer{
+  font-size: 0.9rem;
+  color:#62727b;
+  max-width: 420px;
+}
+
+.risk-desc{
+  font-size:0.85rem;
+  color:#62727b;
+}
+
+.gauge-threshold{
+  position:absolute;
+  top:-4px;
+  height:26px;
+  width:3px;
+  background: rgba(255,255,255,0.9);
+  box-shadow: 0 0 4px rgba(0,0,0,0.35);
+  transform: translateX(-50%);
+}
+
+.btn-analytics {
+    background: #32c1a8;
+}
+
+.btn-analytics:hover {
+    background: #28a090;
+}

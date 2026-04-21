@@ -1,0 +1,59 @@
+.hero {
+    background: linear-gradient(135deg, #1e8fa4, #32c1a8);
+    padding: 50px;
+    border-radius: 14px;
+    color: white;
+    text-align: center;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+}
+
+.hero h1 {
+    font-size: 40px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 18px;
+    opacity: 0.95;
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.hero-authors {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.hero-author {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.author-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.65;
+}
+
+.author-name {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.hero-author-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+

@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+
+{% block title %}CDI – O projekte{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/project.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="hero-project">
+        <h1>O projekte – Skríningový model rizika CDI <strong>CDI</strong></h1>
+        <p>
+            Tento prototyp predstavuje klinicky orientovaný predikčný nástroj na odhad rizika vzniku infekcie 
+            <strong>Clostridioides difficile (CDI)</strong> u hospitalizovaných pacientov. Výpočet rizika je 
+            založený na analýze demografických údajov, laboratórnych parametrov, komorbidíta podanej liečby 
+            pomocou metód strojového učenia.
+        </p>
+
+        <div class="tagline">
+            Výsledky slúžia ako podpora klinického rozhodovania a nenahrádzajú
+            odborný úsudok lekára.
+        </div>
+        <div class="badge-small">
+            Diplomová práca – prediktívne modelovanie rizika <strong>CDI</strong> pomocou strojového učenia
+        </div>
+    </div>
+
+    <div class="section-grid">
+
+        <div class="section-card">
+            <div class="section-title">Cieľ projektu</div>
+            <p>Hlavným cieľom projektu je:</p>
+            <ul>
+                <li>navrhnúť a otestovať modely strojového učenia na odhad rizika <strong>CDI</strong>,</li>
+                <li>prezentovať výsledok v klinicky zrozumiteľnej forme (pravdepodobnosť a riziková kategória),</li>
+                <li>poskytnúť vysvetliteľnosť predikcie pomocou metód <strong>SHAP</strong>, <strong>LIME</strong>, <strong>Odds Ratio</strong></li>
+                <li>umožniť analytický pohľad na dáta (epidemiológia, laboratórne parametre, liečba, komorbidity).</li>
+            </ul>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">Dáta a vstupné premenné</div>
+            <p>
+                Použitý dataset obsahuje anonymizované údaje hospitalizovaných pacientov
+                vrátane informácií o priebehu hospitalizácie, laboratórnych vyšetreniach,
+                pridružených ochoreniach a podanej liečbe.
+            </p>
+            <ul>
+                <li><strong>Demografické údaje:</strong> vek, pohlavie, časové obdobie hospitalizácie.</li>
+                <li><strong>Laboratórne parametre:</strong> základná biochémia, zápalové markery, koagulačné ukazovatele.</li>
+                <li><strong>Komorbidity:</strong> kardiovaskulárne, metabolické, respiračné, onkologické a iné ochorenia.</li>
+                <li><strong>Liečba:</strong> antibiotiká, antivirotiká, imunosupresívna a stimulačná liečba,
+                    inhibítory protónovej pumpy, antikoagulanciá, vitamíny.</li>
+            </ul>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">Spracovanie a príprava dát</div>
+            <p>Pred samotným modelovaním boli dáta spracované nasledovnými krokmi:</p>
+            <ul>
+                <li>čistenie dát a zjednotenie formátu premenných,</li>
+                <li>doplnenie chýbajúcich hodnôt pomocou metód <strong>MICE</strong> a <strong>KNN</strong>,</li>
+                <li>konštrukcia odvodených premenných,</li>
+                <li>riešenie nevyváženosti tried (napr. <strong>Random OverSampling</strong>, <strong>SMOTE</strong>, <strong>ADASYN</strong>),</li>
+                <li>rozdelenie dát na trénovaciu, kalibračnú a testovaciu množinu.</li>
+            </ul>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">Použité modely</div>
+            <p>
+                Aplikácia umožňuje porovnanie viacerých predikčných modelov trénovaných
+                na rovnakých dátach.
+            </p>
+            <ul>
+                <li>Random Forest a Gradient Boosting klasifikátory,</li>
+                <li>Logistická regresia ako referenčný interpretable model,</li>
+                <li>modely vytvorené na rôznych variantoch imputácie (<strong>MICE</strong>, <strong>KNN</strong>) a vyváženia tried.</li>
+            </ul>
+            <p>
+                Hodnotenie predikčných modelov bolo zamerané predovšetkým na metriky
+                <strong>recall (senzitivita)</strong> a <strong>F1-skóre</strong>, ktoré sú
+                v klinickej praxi zásadné z hľadiska bezpečnosti pacienta. Prioritou bolo
+                maximalizovať schopnosť modelu identifikovať rizikových pacientov a
+                minimalizovať počet falošne negatívnych predikcií.
+            </p>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">Vysvetliteľnosť modelu</div>
+            <p>
+                Pre každý individuálny výpočet rizika sú generované grafické a numerické
+                vysvetlenia predikcie:
+            </p>
+            <ul>
+                <li><strong>SHAP waterfall</strong> – znázorňuje príspevok jednotlivých parametrov k výslednej predikcii a ich vplyv na posun smerom k <strong>CDI+</strong> alebo <strong>CDI−</strong>,</li>
+                <li><strong>LIME</strong> – poskytuje lokálne lineárne vysvetlenie najdôležitejších atribútov pre konkrétneho pacienta,</li>
+                <li><strong>Odds Ratio (logistická regresia)</strong> – kvantifikuje vplyv jednotlivých faktorov na zmenu rizika v podobe pomeru šancí, čím umožňuje klinicky interpretovateľné porovnanie významnosti premenných.</li>
+            </ul>
+            <p>
+                Cieľom týchto vizualizácií je umožniť lekárovi lepšie pochopiť, ktoré faktory
+                najviac ovplyvnili odhad rizika u konkrétneho pacienta a akým smerom k výsledku
+                prispeli.
+            </p>
+        </div>
+
+        <div class="section-card">
+            <div class="section-title">Určené použitie a obmedzenia</div>
+            <p>Projekt má charakter výskumného a experimentálneho prototypu.</p>
+            <ul>
+                <li>Výstupy závisia od kvality a reprezentatívnosti vstupných dát,</li>
+                <li>modely boli trénované na konkrétnej populácii pacientov,</li>
+                <li>nie sú zahrnuté všetky možné rizikové faktory (napr. environmentálne faktory).</li>
+            </ul>
+            <div class="note-box">
+                Tento nástroj slúži výhradne ako podporný prostriedok pri orientačnom
+                hodnotení rizika <strong>CDI</strong>. Konečné klinické rozhodnutie je vždy na
+                ošetrujúcom lekárovi.
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+

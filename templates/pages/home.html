@@ -1,0 +1,82 @@
+{# templates/pages/home.html #}
+{% extends "layout.html" %}
+
+{% block title %}Skríningový model rizika CDI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    
+    <div class="hero">
+        <h1>Skríningový nástroj CDI</h1>
+        <p>
+            Webová aplikácia vytvorená v rámci diplomovej práce zameranej na
+            predikciu rizika infekcie <strong>Clostridioides difficile</strong>
+            pomocou metód strojového učenia. Platforma prepája klinické údaje pacientov,
+            analytické nástroje a vysvetliteľné modely s cieľom podporiť lekárske rozhodovanie
+            v klinickej praxi.
+        </p>
+        <div class="hero-authors">
+            <div class="hero-author">
+                <span class="author-label">Vypracoval</span>
+                <span class="author-name">Bc. Pavel Kočan</span>
+            </div>
+            <div class="hero-author-divider"></div>
+            <div class="hero-author">
+                <span class="author-label">Vedúci práce</span>
+                <span class="author-name">Ing. Oliver Lohaj, PhD.</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-4">
+
+        <!-- Predikcia -->
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-title">Predikcia rizika CDI</div>
+                <div class="feature-desc">
+                    Zadajte vybrané klinické a laboratórne údaje pacienta a získajte
+                    odhad rizika CDI na základe natrénovaných modelov strojového učenia.
+                    Výsledok je doplnený o interpretáciu pomocou metód SHAP a LIME.
+                </div>
+                <a href="{{ url_for('predict.index') }}" class="btn-med">Spustiť predikciu</a>
+            </div>
+        </div>
+
+        <!-- Analýza dát -->
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-title">Analýza klinických dát</div>
+                <div class="feature-desc">
+                    Vizualizácia základných štatistických charakteristík datasetu a
+                    vzorov výskytu CDI. Prehľad epidemiologických trendov,
+                    laboratórnych parametrov, liečby a komorbidít pacientov.
+                </div>
+                <a href="{{ url_for('insights.insights') }}" class="btn-med">Zobraziť analýzu dát</a>
+            </div>
+        </div>
+
+        <!-- O projekte -->
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-title">O projekte</div>
+                <div class="feature-desc">
+                    Informácie o použitých dátových zdrojoch, metodike spracovania dát,
+                    návrhu predikčných modelov a architektúre aplikácie vyvinutej
+                    v rámci diplomovej práce.
+                </div>
+                <a href="{{ url_for('pages.project') }}" class="btn-med">O projekte</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+

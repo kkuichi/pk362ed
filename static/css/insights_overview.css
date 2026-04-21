@@ -1,0 +1,22 @@
+
+.section-header {
+    background: linear-gradient(135deg, #1e8fa4, #32c1a8);
+    padding: 40px;
+    border-radius: 14px;
+    color: white;
+    text-align: center;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+}
+
+.section-header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.section-header p {
+    font-size: 17px;
+    opacity: 0.95;
+}
+

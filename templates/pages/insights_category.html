@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}Analýza – {{ category_label }}{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/insights_category.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="cat-header">
+        <h2>{{ category_label }}</h2>
+        <p>Prehľad všetkých dostupných grafov</p>
+    </div>
+
+    <div class="chart-grid {{ category }}">
+        {% for img in imgs %}
+        <div class="chart-card">
+            <div class="chart-title">{{ img.title }}</div>
+            <img
+                src="{{ img.file }}"
+                data-title="{{ img.title }}"
+                data-lightbox
+                alt="{{ img.title }}"
+            >
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox-inner">
+        <button type="button" class="lb-nav lb-prev" data-lb-prev aria-label="Predchádzajúci obrázok">‹</button>
+        <button type="button" class="lb-nav lb-next" data-lb-next aria-label="Nasledujúci obrázok">›</button>
+        <button type="button" class="lb-close" data-lb-close aria-label="Zavrieť">✕</button>
+        <img id="lightbox-img" alt="">
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/insights_lightbox.js') }}"></script>
+{% endblock %}
+
+

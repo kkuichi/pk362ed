@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %}Analýza dát – CDI{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/insights_overview.css') }}">
+{% endblock %}
+
+{% block content %}
+
+
+
+<div class="container">
+    
+    <div class="section-header">
+        <h1>Analýza dát</h1>
+        <p>Klinické vizualizácie datasetu podľa kategórií parametrov</p>
+    </div>
+    
+    <div class="row g-4">
+
+        {% for label, folder in folders.items() %}
+        <div class="col-md-4">
+            <div class="feature-card">
+                <div class="feature-title">{{ label }}</div>
+                <div class="feature-desc">
+                    Zobraziť všetky dostupné grafy pre kategóriu: {{ label }}.
+                </div>
+                <a href="{{ url_for('insights.insights_category', category=folder) }}" class="btn-med">Otvoriť</a>
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+{% endblock %}
+

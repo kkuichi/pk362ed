@@ -1,0 +1,32 @@
+<label class="d-flex align-items-center gap-2">
+    <span>{{ raw }}</span>
+
+    {% if info %}
+    <span class="info-dot"
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          data-bs-html="true"
+          title="{% if info.ref %}
+                 <strong>{{ info.abbr }}</strong><br>
+                 {{ info.desc }}<br>
+                 <strong>Referenčný rozsah:</strong>
+                 {{ info.ref[0] }} – {{ info.ref[1] }} {{ info.unit }}
+               {% else %}
+                 <strong>{{ info.abbr }}</strong><br>
+                 {{ info.desc }}
+               {% endif %}">
+        i
+    </span>
+    {% endif %}
+</label>
+
+<input type="number"
+       class="form-control range-input"
+       id="{{ clean }}"
+       name="{{ clean }}"
+       min="0"
+       step="any"
+       data-min="{{ ranges[clean][0] if clean in ranges else '' }}"
+       data-max="{{ ranges[clean][1] if clean in ranges else '' }}"
+       data-bs-toggle="tooltip"
+       title="">

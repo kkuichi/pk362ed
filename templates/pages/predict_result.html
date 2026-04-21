@@ -1,0 +1,277 @@
+{# templates/pages/predict_result.html #}
+{% extends "layout.html" %}
+
+{% block title %}CDI – Výsledok predikcie{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/predict_result.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="page-wrap">
+
+    <div class="header-bar">
+        <div>
+            <h1>Výsledok predikcie CDI</h1>
+            <p>Modelovo podporené odhadnutie rizika infekcie <em>Clostridioides difficile</em></p>
+        </div>
+
+        <div class="badge-model">
+            {{ model_name }}
+        </div>
+    </div>
+
+    <div class="layout">
+
+        <!-- ĽAVÝ STĹPEC -->
+        <div>
+            <div class="card">
+                <h2>Výsledky predikcie:</h2>
+
+                {% set perc = probability * 100 %}
+                {% set thrp = threshold * 100 %}
+                {% set gauge_left = bar_pos %}
+
+                {% if risk_class == 1 %}
+                    {% set risk_text = "CDI+" %}
+                    {% set pill_class = "high" %}
+                    {% set val_class = "risk-high" %}
+                {% else %}
+                    {% set risk_text = "CDI−" %}
+                    {% set pill_class = "low" %}
+                    {% set val_class = "risk-low" %}
+                {% endif %}
+
+                <div class="risk-row">
+                    <div class="risk-left">
+                        <span class="risk-pill {{ pill_class }}">{{ risk_text }}</span>
+                        <div class="risk-desc">{{ relative_label }}</div>
+                    </div>
+
+                    <div class="risk-right">
+                        <div class="risk-explainer">Riziko CDI</div>
+                        <div class="risk-primary-sm {{ val_class }}">{{ perc|round(1) }} %</div>
+                        <div class="risk-explainer">prah: {{ thrp|round(1) }} %</div>
+                    </div>
+                </div>
+
+                <p class="threshold-info">
+                    Rozhodovací prah: <strong>{{ thrp|round(1) }} %</strong>
+                    <span class="info-icon"
+                          data-text="Prah bol individuálne nastavený pre každý model tak, aby zachytil aspoň 60 % skutočných prípadov CDI. Pacienti s pravdepodobnosťou nad prahom sú klasifikovaní ako CDI+.">
+                        i
+                    </span>
+                    <br>
+
+                    {% if margin_pp >= 0 %}
+                        Pravdepodobnosť pacienta je o <strong>+{{ margin_pp|round(1) }} percentuálnych bodov nad prahom</strong>
+                    {% else %}
+                        Pravdepodobnosť pacienta je o <strong>{{ (margin_pp * -1)|round(1) }} percentuálnych bodov pod prahom</strong>
+                    {% endif %}
+                </p>
+
+                <div class="gauge-wrap">
+                    <div class="gauge-bar">
+                        <div class="gauge-threshold" data-left="50"></div>
+                        <div class="gauge-dot {{ pill_class }}" data-left="{{ gauge_left }}"></div>
+                    </div>
+
+                    <div class="gauge-labels">
+                        <span>Pod prahom</span>
+                        <span>Prah</span>
+                        <span>Nad prahom</span>
+                    </div>
+                </div>
+
+                <p class="subtext" style="margin-top: 14px;">
+                    Tento nástroj je pomocný – <strong>nenahrádza klinický úsudok lekára</strong>.
+                </p>
+
+               <div style="display:flex; justify-content:space-between; margin-top:10px;">
+                    <a href="{{ url_for('pages.home') }}" class="btn-back">Späť</a>
+                    <a href="{{ url_for('insights.insights') }}" class="btn-back">Analýza dát</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRAVÝ STĹPEC  -->
+        <div>
+
+            {% if model_type in ["gb", "rf", "xgb"] %}
+                <div class="card">
+                    <h2>
+                        Faktory ovplyvňujúce predikciu
+                        <span class="info-icon"
+                            data-text="Metóda SHAP zobrazuje, ako jednotlivé vstupné hodnoty tohto pacienta prispeli k výslednej predikovanej pravdepodobnosti. Červené stĺpce zvyšujú riziko CDI, modré ho znižujú.">
+                            i
+                        </span>
+                    </h2>
+
+                    <p class="subtext">
+                        <span style="color:#d62728; font-weight:600;">Červené</span> faktory zvyšujú riziko CDI,
+                        <span style="color:#1f77b4; font-weight:600;">modré</span> ho znižujú.
+                    </p>
+
+                    {% if shap_waterfall_png %}
+                        <img class="explain-image"
+                             src="data:image/png;base64,{{ shap_waterfall_png }}"
+                             alt="SHAP Waterfall">
+                    {% else %}
+                        <p class="subtext">SHAP waterfall sa nepodarilo vygenerovať.</p>
+                    {% endif %}
+
+                    {% if shap_factors %}
+                        {% set up = shap_factors | selectattr("direction", "equalto", "up") | list %}
+                        {% set down = shap_factors | selectattr("direction", "equalto", "down") | list %}
+
+                        <div class="shap-split shap-after">
+                            <div class="shap-box">
+                                <div class="shap-mini-title">Najviac zvyšuje riziko CDI</div>
+                                <table class="factor-table">
+                                    <tr>
+                                        <th>Faktor</th>
+                                        <th>Hodnota pacienta</th>
+                                        <th>Podiel vplyvu</th>
+                                    </tr>
+                                    {% for f in up[:5] %}
+                                    <tr>
+                                        <td>
+                                            {{ f.name }}
+                                            {% if f.desc %}
+                                                <span class="info-icon" data-text="{{ f.desc }}">i</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ f.value }}{% if f.unit %} {{ f.unit }}{% endif %}</td>
+                                        <td class="risk-high"><strong>{{ f.impact_pct }} %</strong></td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+
+                            <div class="shap-box">
+                                <div class="shap-mini-title">Najviac znižuje riziko CDI</div>
+                                <table class="factor-table">
+                                    <tr>
+                                        <th>Faktor</th>
+                                        <th>Hodnota pacienta</th>
+                                        <th>Podiel vplyvu</th>
+                                    </tr>
+                                    {% for f in down[:5] %}
+                                    <tr>
+                                        <td>
+                                            {{ f.name }}
+                                            {% if f.desc %}
+                                                <span class="info-icon" data-text="{{ f.desc }}">i</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ f.value }}{% if f.unit %} {{ f.unit }}{% endif %}</td>
+                                        <td class="risk-low"><strong>{{ f.impact_pct }} %</strong></td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+
+                        <p class="subtext" style="margin-top: 10px;">
+                            „Podiel vplyvu (%)" vyjadruje, akú časť z celkového vysvetlenia tvorí daný faktor v tomto konkrétnom prípade. Nejde o priame percentuálne riziko ochorenia.
+                        </p>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {% if model_type == "logreg" %}
+                {% if local_factors %}
+                <div class="card">
+                    <h2>
+                        Najsilnejšie faktory pre tohto pacienta
+                        <span class="info-icon"
+                              data-text="Zobrazuje, ktoré hodnoty tohto konkrétneho pacienta najviac ovplyvnili výsledok predikcie. Efekt na riziko vyjadruje smer a silu vplyvu daného faktora v modeli.">
+                            i
+                        </span>
+                    </h2>
+
+                    <table class="factor-table">
+                        <tr>
+                            <th>Premenná</th>
+                            <th>Hodnota pacienta</th>
+                            <th>Efekt na riziko</th>
+                            <th>Interpretácia</th>
+                        </tr>
+
+                        {% for f in local_factors %}
+                        <tr>
+                            <td>{{ f.name }}</td>
+                            <td>{{ f.value }}</td>
+                            <td class="{% if f.raw_contrib > 0 %}risk-high{% elif f.raw_contrib < 0 %}risk-low{% endif %}">
+                                <strong>{{ f.impact_display }}</strong>
+                            </td>
+                            <td class="{% if f.raw_contrib > 0 %}risk-high{% elif f.raw_contrib < 0 %}risk-low{% endif %}">
+                                {{ f.effect_display }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+
+                    <p class="subtext" style="margin-top: 10px;">
+                        Hodnota efektu (napr. ×1.85) vyjadruje, koľkokrát sa zmení šanca výskytu CDI vplyvom daného faktora u tohto pacienta. Hodnota nad ×1.0 znamená zvýšenie rizika, pod ×1.0 zníženie.
+                    </p>
+                </div>
+                {% endif %}
+
+                <div class="card">
+                    <h2>
+                        Globálny prehľad najvýznamnejších faktorov
+                        <span class="info-icon"
+                              data-text="Prehľad ukazuje, ktoré faktory celkovo najsilnejšie súvisia s výskytom CDI v analyzovanom súbore pacientov. Ide o globálnu vlastnosť modelu, nie o hodnoty konkrétneho pacienta.">
+                            i
+                        </span>
+                    </h2>
+
+                    <p class="subtext">
+                        Celkové správanie modelu —
+                        <span style="color:#d62728; font-weight:600;">červené</span> faktory zvyšujú riziko,
+                        <span style="color:#2ca02c; font-weight:600;">zelené</span> ho znižujú.
+                    </p>
+
+                    {% if odds_png %}
+                        <img class="explain-image"
+                             src="data:image/png;base64,{{ odds_png }}"
+                             alt="Globálne faktory logistickej regresie">
+                    {% else %}
+                        <p class="subtext">Graf globálnych faktorov sa nepodarilo vygenerovať.</p>
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            <div class="card">
+                <h2>
+                    Lokálne vysvetlenie predikcie (LIME)
+                    <span class="info-icon"
+                        data-text="Metóda LIME približne vysvetľuje, ktoré vstupné hodnoty tohto pacienta najviac ovplyvnili výsledok predikcie v okolí daného prípadu. Červené stĺpce zvyšujú riziko CDI, zelené ho znižujú.">
+                        i
+                    </span>
+                </h2>
+
+                <p class="subtext">
+                    Faktory špecifické pre tohto pacienta —
+                    <span style="color:#d62728; font-weight:600;">červené</span> zvyšujú riziko CDI,
+                    <span style="color:#2ca02c; font-weight:600;">zelené</span> ho znižujú.
+                </p>
+
+                {% if lime_png %}
+                    <img class="explain-image"
+                         src="data:image/png;base64,{{ lime_png }}"
+                         alt="LIME vysvetlenie">
+                {% else %}
+                    <p class="subtext">LIME výstup sa nepodarilo vygenerovať.</p>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/predict_result.js') }}"></script>
+{% endblock %}

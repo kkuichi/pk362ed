@@ -1,0 +1,103 @@
+{% extends "layout.html" %}
+
+{% block title %}CDI – Predikčný nástroj{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/predict.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="header-bar">
+        <h2>Skríningový model rizika CDI</h2>
+        <p>Predikcia rizika infekcie <em>Clostridioides difficile</em></p>
+    </div>
+
+    <div class="container-card">
+
+        <form method="POST" action="{{ url_for('predict.predict') }}" novalidate>
+
+            <!-- MODEL -->
+            <h5 class="category-title">Výber modelu</h5>
+            <div class="row g-3 mb-3">
+                <div class="col-12">
+                    <select id="modelSelect" name="model" class="form-select" required>
+                        {% for m in models %}
+                        <option value="{{ m }}" {% if m == '20_MICE_XGBoost_score1_ADASYN' %}selected{% endif %}>
+                            {{ model_labels[m] if m in model_labels else m }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <!-- DEMOGRAFIA -->
+            <h5 class="category-title">Základné údaje pacienta</h5>
+            <div class="row g-3">
+                {% for raw, clean in demografia %}
+                {% set info = reference_info.get(clean) %}
+                <div class="col-md-4">
+                    {% include "partials/input_numeric.html" %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- LABORATÓRNE HODNOTY -->
+            {% for group_name, items in lab_groups.items() %}
+                {% if items and (items|length > 0) %}
+                    <h5 class="category-title">Laboratórne hodnoty – {{ group_name }}</h5>
+                    <div class="row g-3">
+                        {% for raw, clean in items %}
+                        {% set info = reference_info.get(clean) %}
+                        <div class="col-md-4">
+                            {% include "partials/input_numeric.html" %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <!-- KOMORBIDITY -->
+            <h5 class="category-title">Komorbidity</h5>
+            <div class="row g-2">
+                {% for raw, clean in komorbidity %}
+                <div class="col-md-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="{{ clean }}" name="{{ clean }}" value="1">
+                    <label class="form-check-label" for="{{ clean }}">{{ raw }}</label>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- LIEKY -->
+            <h5 class="category-title">Podané lieky</h5>
+            {% for group, pairs in drug_pairs.items() %}
+            <div class="card p-3 mb-3">
+                <h6><strong>{{ group }}</strong></h6>
+                <div class="row g-2">
+                    {% for raw, clean in pairs %}
+                    <div class="col-md-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="{{ clean }}" name="{{ clean }}" value="1">
+                        <label class="form-check-label" for="{{ clean }}">{{ raw }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="text-center mt-4">
+                <button class="btn btn-primary btn-lg submit-btn">
+                    Predikovať riziko CDI
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/predict.js') }}"></script>
+{% endblock %}

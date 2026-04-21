@@ -1,0 +1,43 @@
+.feature-card {
+    background: white;
+    border-radius: 14px;
+    padding: 25px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-left: 6px solid #1e8fa4;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.feature-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.feature-desc {
+    font-size: 15px;
+    color: #444;
+    margin-bottom: 22px;
+    min-height: 70px;
+}
+
+.btn-med {
+    display: inline-block;
+    padding: 10px 22px;
+    background: #1e8fa4;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.btn-med:hover {
+    background: #16788a;
+    color: white;
+}
